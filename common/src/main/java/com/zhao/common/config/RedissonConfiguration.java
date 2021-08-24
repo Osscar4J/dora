@@ -23,9 +23,9 @@ public class RedissonConfiguration {
 
     @Value("${spring.redis.host}")
     private String host;
-    @Value("${spring.redis.port}")
+    @Value("${spring.redis.port:6379}")
     private String port;
-    @Value("${spring.redis.password}")
+    @Value("${spring.redis.password:}")
     private String password;
 
     @Bean

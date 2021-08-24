@@ -7,9 +7,9 @@
         <artifactId>dora</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>common-service</artifactId>
+    <artifactId>dora-admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>common-service</name>
+    <name>dora-admin</name>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>com.zhao</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>common-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

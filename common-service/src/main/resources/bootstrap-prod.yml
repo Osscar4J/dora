@@ -3,6 +3,7 @@ spring:
     nacos:
       discovery:
         server-addr: http://nacos-registry:8848
+        service: ${spring.application.name}
       config:
         server-addr: http://nacos-registry:8848
         file-extension: yaml

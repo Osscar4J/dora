@@ -4,6 +4,7 @@ import com.zhao.commonservice.interceptor.PermissionInterceptor;
 import com.zhao.commonservice.resolver.CurrentUserResolver;
 import com.zhao.commonservice.resolver.PartBodyResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,12 +15,16 @@ import java.util.List;
 @Configuration
 public class CommonWebMvcConfig implements WebMvcConfigurer {
 
+    @Value("${security:false}")
+    private boolean security;
+
     @Autowired
     private PermissionInterceptor permissionInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(permissionInterceptor).addPathPatterns("/api/**");
+        if (security)
+            registry.addInterceptor(permissionInterceptor).addPathPatterns("/api/**");
     }
 
     @Override

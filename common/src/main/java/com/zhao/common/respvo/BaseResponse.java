@@ -1,5 +1,7 @@
 package com.zhao.common.respvo;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * 统一响应基类
  * @author zhaolianqi
@@ -25,7 +27,11 @@ public class BaseResponse<T> {
 	public static <T> BaseResponse<T> ERROR(String msg) {
 		return new BaseResponse<T>(500, msg);
 	}
-	
+
+	public static <T> BaseResponse<T> ERROR(int code, String msg) {
+		return new BaseResponse<T>(code, msg);
+	}
+
 	public static <T> BaseResponse<T> SUCCESS(T t) {
 		BaseResponse<T> res = new BaseResponse<T>();
 		res.code = 0;
@@ -63,5 +69,10 @@ public class BaseResponse<T> {
 	}
 	public void setCode(int code) {
 		this.code = code;
+	}
+
+	@Override
+	public String toString() {
+		return JSONObject.toJSONString(this);
 	}
 }

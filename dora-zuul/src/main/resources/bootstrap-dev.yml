@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://nacos.chachacha.top:80
+        service: ${spring.application.name}
+      config:
+        server-addr: http://nacos.chachacha.top:80
+        file-extension: yaml
+logging:
+  level:
+    root: info

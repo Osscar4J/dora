@@ -4,6 +4,10 @@ import com.zhao.common.respvo.BaseResponse;
 import com.zhao.commonservice.annotation.CommonPath;
 import com.zhao.commonservice.annotation.LoginRequired;
 import com.zhao.commonservice.utils.CommonUtils;
+import com.zhao.doraclients.client.CommonServiceClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +25,11 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/admin")
 public class AdminApi {
 
+    private Logger logger = LoggerFactory.getLogger(AdminApi.class);
+
+    @Autowired
+    private CommonServiceClient commonServiceClient;
+
     @GetMapping
     public BaseResponse<String> test(){
         return BaseResponse.SUCCESS();
@@ -29,6 +38,7 @@ public class AdminApi {
     @CommonPath
     @GetMapping("/ip")
     public BaseResponse<String> getIp(HttpServletRequest request){
+        logger.info(commonServiceClient.test().toString());
         return BaseResponse.SUCCESS(CommonUtils.getIpAddr(request));
     }
 

@@ -1,4 +1,4 @@
-package com.zhao.common.config;
+package com.zhao.commonservice.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

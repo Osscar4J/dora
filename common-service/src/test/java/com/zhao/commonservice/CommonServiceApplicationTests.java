@@ -1,6 +1,6 @@
 package com.zhao.commonservice;
 
-import com.zhao.common.service.RedisService;
+import com.zhao.commonservice.service.RedisService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

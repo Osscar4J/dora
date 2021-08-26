@@ -1,4 +1,4 @@
-package com.zhao.common.service;
+package com.zhao.commonservice.service;
 
 import org.redisson.api.RKeys;
 import org.redisson.api.RMapCache;

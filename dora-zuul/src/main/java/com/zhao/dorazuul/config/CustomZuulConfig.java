@@ -9,12 +9,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * @ClassName: CustomZuulConfig
- * @Description: TODO
  * @Author: zhaolianqi
  * @Date: 2021/9/16 10:29
  * @Version: v1.0
  */
-@Configuration
+//@Configuration
 public class CustomZuulConfig {
 
     @Autowired

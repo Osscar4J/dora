@@ -39,7 +39,7 @@ public class AdminApi {
     @GetMapping("/ip")
     public BaseResponse<String> getIp(HttpServletRequest request){
         logger.info(commonServiceClient.test().toString());
-        return BaseResponse.SUCCESS(CommonUtils.getIpAddr(request));
+        return BaseResponse.SUCCESS(CommonUtils.getIpAddr(request) + " --1");
     }
 
 }

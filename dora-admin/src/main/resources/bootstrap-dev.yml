@@ -11,4 +11,4 @@ logging:
   level:
     root: info
 server:
-  port: 8002
+  port: 8001

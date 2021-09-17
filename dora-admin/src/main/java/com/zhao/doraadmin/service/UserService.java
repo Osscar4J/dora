@@ -1,6 +1,6 @@
 package com.zhao.doraadmin.service;
 
-import com.zhao.doraadmin.entity.User;
+import com.zhao.dorambg.entity.User;
 import com.zhao.dorambg.service.BaseUserService;
 
 /**

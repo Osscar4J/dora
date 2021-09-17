@@ -1,7 +1,6 @@
 package com.zhao.dorambg.dao;
 
-import com.zhao.dorambg.entity.BaseUser;
-import org.springframework.stereotype.Repository;
+import com.zhao.dorambg.entity.User;
 
 /**
  * @ClassName: UserMapper
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Repository;
  * @Date: 2021/9/17 10:14
  * @Version: v1.0
  */
-@Repository
-public interface BaseUserMapper extends MyBaseMapper<BaseUser> {
+public interface BaseUserMapper extends MyBaseMapper<User> {
 
 }

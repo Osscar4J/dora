@@ -1,7 +1,7 @@
 package com.zhao.doraadmin.dao;
 
-import com.zhao.doraadmin.entity.User;
-import com.zhao.dorambg.dao.MyBaseMapper;
+import com.zhao.dorambg.dao.BaseUserMapper;
+import com.zhao.dorambg.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @Version: v1.0
  */
 @Repository
-public interface UserMapper extends MyBaseMapper<User> {
+public interface UserMapper extends BaseUserMapper {
 
     User selectByName(@Param("name") String name);
 

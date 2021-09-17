@@ -2,8 +2,8 @@ package com.zhao.doraadmin.service.impl;
 
 import com.zhao.commonservice.utils.Asserts;
 import com.zhao.doraadmin.dao.UserMapper;
-import com.zhao.doraadmin.entity.User;
 import com.zhao.doraadmin.service.UserService;
+import com.zhao.dorambg.entity.User;
 import com.zhao.dorambg.service.impl.BaseUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -5,13 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhao.dorambg.dao.MyBaseMapper;
+import com.zhao.dorambg.entity.SuperEntity;
 import com.zhao.dorambg.reqvo.BaseReqVO;
 import com.zhao.dorambg.service.MyBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 
-public abstract class MyBaseServiceImpl<M extends MyBaseMapper, T> extends ServiceImpl<MyBaseMapper<T>, T> implements MyBaseService<T> {
+public abstract class MyBaseServiceImpl<M extends MyBaseMapper, T extends SuperEntity> extends ServiceImpl<MyBaseMapper<T>, T> implements MyBaseService<T> {
 
     @Autowired
     private M myBaseMapper;

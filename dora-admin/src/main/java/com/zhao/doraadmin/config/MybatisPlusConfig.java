@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@MapperScan({"com.zhao.dorambg.dao", "com.zhao.doraadmin.dao"})
+@MapperScan({"com.zhao.doraadmin.dao"})
 @Configuration
 public class MybatisPlusConfig {
 

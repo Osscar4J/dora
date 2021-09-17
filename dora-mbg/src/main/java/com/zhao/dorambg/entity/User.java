@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @Version: v1.0
  */
 @TableName("user_tb")
-public class BaseUser extends BaseEntity {
+public class User extends BaseEntity {
 
     private Integer gender;
     private String name;

@@ -7,7 +7,6 @@
         <artifactId>dora</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.zhao</groupId>
     <artifactId>dora-zuul</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>dora-zuul</name>

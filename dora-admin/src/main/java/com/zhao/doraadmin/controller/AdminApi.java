@@ -4,7 +4,10 @@ import com.zhao.common.respvo.BaseResponse;
 import com.zhao.commonservice.annotation.CommonPath;
 import com.zhao.commonservice.annotation.LoginRequired;
 import com.zhao.commonservice.utils.CommonUtils;
+import com.zhao.doraadmin.service.UserService;
 import com.zhao.doraclients.client.CommonServiceClient;
+import com.zhao.dorambg.entity.BaseUser;
+import com.zhao.dorambg.reqvo.BaseReqVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class AdminApi {
 
     @Autowired
     private CommonServiceClient commonServiceClient;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public BaseResponse<String> test(){
@@ -40,6 +45,15 @@ public class AdminApi {
     public BaseResponse<String> getIp(HttpServletRequest request){
         logger.info(commonServiceClient.test().toString());
         return BaseResponse.SUCCESS(CommonUtils.getIpAddr(request) + " --1");
+    }
+
+    @CommonPath
+    @GetMapping("/user")
+    public BaseResponse<BaseUser> getUser(BaseReqVO reqVO){
+        if (reqVO.getId() != null){
+            return BaseResponse.SUCCESS(userService.getById(reqVO.getId()));
+        }
+        return BaseResponse.SUCCESS(userService.getByName(reqVO.getName()));
     }
 
 }

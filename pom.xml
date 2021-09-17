@@ -17,6 +17,7 @@
 
     <modules>
         <module>common</module>
+        <module>dora-mbg</module>
         <module>dora-clients</module>
         <module>common-service</module>
         <module>dora-admin</module>
@@ -107,6 +108,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
         </dependency>
 
         <dependency>

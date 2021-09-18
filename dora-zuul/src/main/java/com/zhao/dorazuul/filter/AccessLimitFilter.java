@@ -1,23 +1,20 @@
 package com.zhao.dorazuul.filter;
 
-import com.google.common.util.concurrent.RateLimiter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import com.zhao.common.respvo.BaseResponse;
+import com.zhao.commonservice.utils.CommonUtils;
 import com.zhao.dorazuul.config.CustomConfig;
-import org.aspectj.util.SoftHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.zhao.dorazuul.config.RateLimiterManager;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.lang.ref.SoftReference;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: AccessLimitFilter
@@ -29,11 +26,9 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AccessLimitFilter extends ZuulFilter {
 
-    private final Map<Integer, SoftReference<RateLimiter>> limiterMap = new SoftHashMap<>();
-
-    private Logger logger = LoggerFactory.getLogger(AccessLimitFilter.class);
     @Autowired
     private CustomConfig customConfig;
+    private final String DEFAULT_IDENTIFY = "default_identify";
 
     @Override
     public String filterType() {
@@ -59,9 +54,13 @@ public class AccessLimitFilter extends ZuulFilter {
             uri = uri.replaceAll("/+", "-");
             if (uri.startsWith("-"))
                 uri = uri.replaceFirst("-", "");
-            if (limits.keySet().contains(uri)){
-                RateLimiter limiter = getLimiterByRate(limits.get(uri));
-                if (limiter != null && !limiter.tryAcquire(1, 0, TimeUnit.SECONDS)){
+            if (limits.containsKey(uri)){
+
+                String identify = CommonUtils.getIpAddr(requestContext.getRequest());
+                if (StringUtils.isEmpty(identify))
+                    identify = DEFAULT_IDENTIFY;
+
+                if (!RateLimiterManager.tryAcquireOnePermit(identify, limits.get(uri))){
                     requestContext.setSendZuulResponse(false);
                     requestContext.setResponseBody(BaseResponse.ERROR(HttpStatus.TOO_MANY_REQUESTS.value(),"访问受限").toString());
                     requestContext.setResponseStatusCode(HttpStatus.TOO_MANY_REQUESTS.value());
@@ -73,25 +72,4 @@ public class AccessLimitFilter extends ZuulFilter {
         return null;
     }
 
-    private RateLimiter getLimiterByRate(Integer rate){
-        SoftReference<RateLimiter> softReference = limiterMap.get(rate);
-        if (softReference != null){
-            RateLimiter limiter = softReference.get();
-            if (limiter != null)
-                return limiter;
-        }
-
-        synchronized (this){
-            softReference = limiterMap.get(rate);
-            if (softReference != null){
-                RateLimiter limiter = softReference.get();
-                if (limiter != null)
-                    return limiter;
-            }
-
-            RateLimiter limiter = RateLimiter.create(rate);
-            limiterMap.put(rate, new SoftReference<>(limiter));
-            return limiter;
-        }
-    }
 }

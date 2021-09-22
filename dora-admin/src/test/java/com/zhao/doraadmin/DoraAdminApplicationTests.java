@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class DoraAdminApplicationTests {
@@ -36,6 +37,12 @@ class DoraAdminApplicationTests {
 
         List<String> res = geo.radius(116.448968,39.915267, 1500., GeoUnit.METERS);
         logger.info("{}", res);
+
+        Double dist = geo.dist("永安里", "复兴门", GeoUnit.KILOMETERS);
+        logger.info("{}", dist);
+
+        Map<String, Double> distMap = geo.radiusWithDistance(116.380684,39.906177, 3, GeoUnit.KILOMETERS);
+        logger.info("{}", distMap);
 
     }
 

@@ -64,21 +64,8 @@ public enum ResponseStatus {
 	,USER_INVALID_KEY(1021, "无效的key")
 	/**1022：账号不能为空*/
 	,USER_ACCOUNT_CANT_BE_EMPTY(1022, "账号不能为空")
-
-	/**1101：服务不存在*/
-	,SERVICE_NOT_EXIST(1101, "服务不存在")
-	/**1102：服务暂时不可用*/
-	,SERVICE_CANT_USE(1102, "服务暂时不可用")
-	/**1103：服务维护中*/
-	,SERVICE_FIX(1103, "服务维护中")
-	/**1104： 该服务不支持批量操作*/
-	,SERVICE_NOT_ALLOW_BULK(1104, "该服务不支持批量操作")
-	/**1105：该服务不支持数字字母混合*/
-	,SERVICE_NOT_ALLOW_ALPHA(1105, "该服务不支持数字字母混合")
-	/**1106：数据格式有误*/
-	,SERVICE_DATA_ROMAT_ERROR(1106, "数据格式有误")
-	/**1107: 供应商服务同步失败*/
-	,SERVICE_SYNC_CORRECT(1107, "供应商服务同步失败")
+	/**1023：登录已失效 */
+	,LOGIN_OUT_OF_TIME(1023, "登录已失效")
 
     /**1601：文件不存在*/
 	,FILE_NOT_EXSIT(1601, "文件不存在")

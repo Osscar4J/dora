@@ -14,17 +14,17 @@ import java.util.Date;
 public class BaseEntity extends SuperEntity {
 
     @TableId(type = IdType.INPUT)
-    private Integer id;
+    private Long id;
     private Integer status;
     private Integer isDel;
     private Date createTime;
     private Date updateTime;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

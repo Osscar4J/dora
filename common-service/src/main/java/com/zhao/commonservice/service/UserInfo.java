@@ -12,4 +12,6 @@ public interface UserInfo {
 
     Serializable getId();
 
+    String getSign();
+
 }

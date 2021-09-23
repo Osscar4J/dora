@@ -31,14 +31,25 @@ import java.util.Map;
 public class JwtTokenUtil {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
     private static String JWT_SECRET = null;
-    private static Long expiration = null;
+    private static Integer expiration = null;
+    private static Integer refreshExp = 604800;
 
-    public static void initConfig(String secret, long exp){
+    public static void initConfig(String secret, int exp){
+        initConfig(secret, exp, null);
+    }
+
+    public static void initConfig(String secret, int exp, Integer refreshExp){
+        if (refreshExp == null || refreshExp <= 0)
+            refreshExp = 604800;
+        if (exp <= 0)
+            exp = 1800;
+
         if (JwtTokenUtil.JWT_SECRET == null){
             synchronized (JwtTokenUtil.class){
                 if (JwtTokenUtil.JWT_SECRET == null){
                     JwtTokenUtil.JWT_SECRET = secret;
                     JwtTokenUtil.expiration = exp;
+                    JwtTokenUtil.refreshExp = refreshExp;
                 }
             }
         }
@@ -55,6 +66,16 @@ public class JwtTokenUtil {
         Map<String, Object> claims = new HashMap<>(4);
         claims.put("id", user.getId());
         claims.put("exp", generateExpirationDate().getTime());
+        return generateToken(claims);
+    }
+
+    public static String generateRefreshToken(UserInfo user){
+        if (user == null)
+            throw new BusinessException(ResponseStatus.USER_NOT_FOUND);
+        Map<String, Object> claims = new HashMap<>(4);
+        claims.put("id", user.getId());
+        claims.put("sign", user.getSign());
+        claims.put("exp", System.currentTimeMillis() + refreshExp * 1000);
         return generateToken(claims);
     }
 
@@ -128,15 +149,21 @@ public class JwtTokenUtil {
         Claims claims = getClaimsFromToken(token);
         if (claims == null)
             return null;
-        UserInfo user = () -> (Serializable) claims.get("id");
+        UserInfo user = new UserInfo() {
+            @Override
+            public Serializable getId() {
+                return (Serializable) claims.get("id");
+            }
+            @Override
+            public String getSign() {
+                Object sign = claims.get("sign");
+                if (sign != null)
+                    return (String) sign;
+                return null;
+            }
+        };
         TokenModel tokenModel = new TokenModel();
         tokenModel.setUser(user);
-        // 检查是否token是否在15分钟后过期，如果是则生成新的token
-        Date expiredDate = claims.getExpiration();
-        Date now = new Date(System.currentTimeMillis() + 15 * 1000 * 60);
-        if (now.after(expiredDate)){
-            tokenModel.setToken(JwtTokenUtil.generateToken(user));
-        }
         return tokenModel;
     }
 

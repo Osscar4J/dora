@@ -6,7 +6,6 @@ import com.zhao.commonservice.constants.ResponseStatus;
 import com.zhao.commonservice.constants.SysConstants;
 import com.zhao.commonservice.entity.TokenModel;
 import com.zhao.commonservice.exception.BusinessException;
-import com.zhao.commonservice.service.UserInfo;
 import com.zhao.commonservice.utils.JwtTokenUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -48,21 +47,17 @@ public class PermissionInterceptor implements HandlerInterceptor {
      */
     private boolean classPermissionHandler(Class<?> c, HttpServletRequest request, HttpServletResponse response) {
         if (c.getAnnotation(LoginRequired.class) != null) {
-            checkToken(request.getHeader(SysConstants.TOKEN), response);
+            checkToken(request.getHeader(SysConstants.TOKEN));
         }
         return true;
     }
 
-    private UserInfo checkToken(String token, HttpServletResponse response){
+    private void checkToken(String token){
         if (StringUtils.isEmpty(token))
             throw new BusinessException(ResponseStatus.NO_PERMISSION);
         TokenModel tokenModel = JwtTokenUtil.token2tokenModal(token);
         if (tokenModel == null)
-            throw new BusinessException(ResponseStatus.UNAUTHORIZED);
-        // 返回新的token
-        if (tokenModel.getToken() != null)
-            response.setHeader(SysConstants.TOKEN, tokenModel.getToken());
-        return tokenModel.getUser();
+            throw new BusinessException(ResponseStatus.NO_PERMISSION);
     }
 
     /**
@@ -73,7 +68,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
      */
     private boolean methodPermissionHandler(HandlerMethod method, HttpServletRequest request, HttpServletResponse response) {
         if (method.hasMethodAnnotation(LoginRequired.class)) {
-            checkToken(request.getHeader(SysConstants.TOKEN), response);
+            checkToken(request.getHeader(SysConstants.TOKEN));
         }
         // 功能权限
 //        Class<?> claz = method.getBeanType();

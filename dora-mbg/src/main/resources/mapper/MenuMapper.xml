@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhao.dorambg.dao.BaseRoleMapper" >
+	<resultMap type="com.zhao.dorambg.entity.Role" id="BaseRM">
+		<id column="id" property="id"/>
+		<result column="status" property="status"/>
+		<result column="type" property="type"/>
+		<result column="sort_no" property="sort_no"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="creator_id" property="creatorId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="name" property="name"/>
+		<result column="target" property="target"/>
+		<result column="link" property="link"/>
+		<result column="icon" property="icon"/>
+		<result column="description" property="description"/>
+	</resultMap>
+
+	<sql id="BaseSelectColumn">
+		self.id,
+		self.status,
+		self.type,
+		self.sort_no,
+		self.parent_id,
+		self.create_time,
+		self.update_time,
+		self.name,
+		self.target,
+		self.link,
+		self.icon,
+		self.description
+	</sql>
+	
+	<sql id="LinkedSql">
+		from menu_tb self
+	</sql>
+	
+	<sql id="PageConditionSql">
+		where self.is_del!=1
+		<if test="reqvo.name != null">
+			and self.name like concat('%', #{reqvo.name}, '%')
+		</if>
+	</sql>
+
+	<select id="selectTotalCount" resultType="long">
+		select count(*)
+		<include refid="LinkedSql"></include>
+		<include refid="PageConditionSql"></include>
+	</select>
+
+	<select id="selectPage" resultMap="BaseRM">
+		select
+			<include refid="BaseSelectColumn"></include>
+		<include refid="LinkedSql"></include>
+		inner join (
+			select self.id
+			<include refid="LinkedSql"></include>
+			<include refid="PageConditionSql"></include>
+			order by self.id desc
+			<if test="reqvo.pageable == 1">
+				limit #{reqvo.position}, #{reqvo.size}
+			</if>
+		) u on u.id=self.id
+		order by self.id desc
+	</select>
+
+	<select id="selectDetail" resultMap="BaseRM">
+		select
+			<include refid="BaseSelectColumn"></include>
+		<include refid="LinkedSql"></include>
+		inner join (
+			select self.id
+			<include refid="LinkedSql"></include>
+			<include refid="PageConditionSql"></include>
+			order by self.id desc
+			limit 1
+		) u on u.id=self.id
+	</select>
+
+</mapper>

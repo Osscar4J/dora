@@ -1,6 +1,8 @@
 package com.zhao.doraadmin.service.impl;
 
+import com.zhao.commonservice.utils.Asserts;
 import com.zhao.doraadmin.service.RoleService;
+import com.zhao.dorambg.entity.Role;
 import com.zhao.dorambg.service.impl.BaseRoleServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -13,4 +15,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleServiceImpl extends BaseRoleServiceImpl implements RoleService {
 
+    @Override
+    public boolean save(Role entity) {
+        Asserts.notEmpty(entity.getName());
+        return super.save(entity);
+    }
 }

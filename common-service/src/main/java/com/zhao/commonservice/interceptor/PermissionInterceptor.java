@@ -1,12 +1,14 @@
 package com.zhao.commonservice.interceptor;
 
+import com.zhao.common.modal.TokenModel;
+import com.zhao.common.utils.JwtTokenUtil;
 import com.zhao.commonservice.annotation.CommonPath;
 import com.zhao.commonservice.annotation.LoginRequired;
 import com.zhao.commonservice.constants.ResponseStatus;
 import com.zhao.commonservice.constants.SysConstants;
-import com.zhao.commonservice.entity.TokenModel;
 import com.zhao.commonservice.exception.BusinessException;
-import com.zhao.commonservice.utils.JwtTokenUtil;
+import com.zhao.doraclients.client.AuthServiceClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -18,6 +20,9 @@ import java.io.IOException;
 
 @Component
 public class PermissionInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private AuthServiceClient authServiceClient;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
@@ -55,6 +60,10 @@ public class PermissionInterceptor implements HandlerInterceptor {
     private void checkToken(String token){
         if (StringUtils.isEmpty(token))
             throw new BusinessException(ResponseStatus.NO_PERMISSION);
+
+        if (!JwtTokenUtil.ready){
+            JwtTokenUtil.initConfig(authServiceClient.getTokenConfig().getContent());
+        }
         TokenModel tokenModel = JwtTokenUtil.token2tokenModal(token);
         if (tokenModel == null)
             throw new BusinessException(ResponseStatus.NO_PERMISSION);

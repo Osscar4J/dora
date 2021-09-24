@@ -2,6 +2,7 @@ package com.zhao.dorambg.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhao.dorambg.dao.MyBaseMapper;
@@ -11,6 +12,8 @@ import com.zhao.dorambg.service.MyBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public abstract class MyBaseServiceImpl<M extends MyBaseMapper, T extends SuperEntity> extends ServiceImpl<MyBaseMapper<T>, T> implements MyBaseService<T> {
 
@@ -59,4 +62,17 @@ public abstract class MyBaseServiceImpl<M extends MyBaseMapper, T extends SuperE
         return true;
     }
 
+    @Override
+    public boolean save(T entity) {
+        Class<?> clazz = entity.getClass();
+        try {
+            Method setId = clazz.getMethod("setId", Long.class);
+            if (setId != null){
+                setId.invoke(entity, IdWorker.getId());
+            }
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return super.save(entity);
+    }
 }

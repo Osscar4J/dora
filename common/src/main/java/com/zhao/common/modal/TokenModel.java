@@ -1,6 +1,5 @@
-package com.zhao.commonservice.entity;
+package com.zhao.common.modal;
 
-import com.zhao.commonservice.service.UserInfo;
 
 import java.io.Serializable;
 

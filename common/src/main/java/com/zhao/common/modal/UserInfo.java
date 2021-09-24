@@ -1,6 +1,4 @@
-package com.zhao.commonservice.service;
-
-import java.io.Serializable;
+package com.zhao.common.modal;
 
 /**
  * @ClassName: UserInfo
@@ -10,7 +8,7 @@ import java.io.Serializable;
  */
 public interface UserInfo {
 
-    Serializable getId();
+    Long getId();
 
     String getSign();
 

@@ -1,6 +1,8 @@
 package com.zhao.doraauth.api;
 
 import com.zhao.common.respvo.BaseResponse;
+import com.zhao.common.utils.JwtTokenUtil;
+import com.zhao.common.utils.TokenConfig;
 import com.zhao.doraauth.entity.Account;
 import com.zhao.doraauth.resp.LoginRespVO;
 import com.zhao.doraauth.service.AccountService;
@@ -28,6 +30,11 @@ public class AuthApi {
     @GetMapping("/refreshToken")
     public BaseResponse<String> refreshToken(@RequestHeader("refresh") String refresh){
         return BaseResponse.SUCCESS(accountService.getAccessTokenByRefreshToken(refresh));
+    }
+
+    @GetMapping("/tokenConfig-internal")
+    public BaseResponse<TokenConfig> getTokenConfig(){
+        return BaseResponse.SUCCESS(JwtTokenUtil.getConfiguration());
     }
 
 }

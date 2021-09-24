@@ -1,9 +1,7 @@
-package com.zhao.commonservice.utils;
+package com.zhao.common.utils;
 
-import com.zhao.commonservice.constants.ResponseStatus;
-import com.zhao.commonservice.entity.TokenModel;
-import com.zhao.commonservice.exception.BusinessException;
-import com.zhao.commonservice.service.UserInfo;
+import com.zhao.common.modal.TokenModel;
+import com.zhao.common.modal.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,10 +11,10 @@ import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * JwtToken生成的工具类
@@ -34,8 +32,22 @@ public class JwtTokenUtil {
     private static Integer expiration = null;
     private static Integer refreshExp = 604800;
 
+    public static boolean ready = false;
+
+    public static TokenConfig getConfiguration(){
+        TokenConfig config = new TokenConfig();
+        config.setExpiration(expiration);
+        config.setRefreshExp(refreshExp);
+        config.setSecret(JWT_SECRET);
+        return config;
+    }
+
     public static void initConfig(String secret, int exp){
         initConfig(secret, exp, null);
+    }
+
+    public static void initConfig(TokenConfig config){
+        initConfig(config.getSecret(), config.getExpiration(), config.getRefreshExp());
     }
 
     public static void initConfig(String secret, int exp, Integer refreshExp){
@@ -50,6 +62,8 @@ public class JwtTokenUtil {
                     JwtTokenUtil.JWT_SECRET = secret;
                     JwtTokenUtil.expiration = exp;
                     JwtTokenUtil.refreshExp = refreshExp;
+
+                    JwtTokenUtil.ready = true;
                 }
             }
         }
@@ -62,7 +76,7 @@ public class JwtTokenUtil {
      */
     public static String generateToken(UserInfo user){
         if (user == null)
-            throw new BusinessException(ResponseStatus.USER_NOT_FOUND);
+            throw new RuntimeException("用户不存在");
         Map<String, Object> claims = new HashMap<>(4);
         claims.put("id", user.getId());
         claims.put("exp", generateExpirationDate().getTime());
@@ -71,7 +85,7 @@ public class JwtTokenUtil {
 
     public static String generateRefreshToken(UserInfo user){
         if (user == null)
-            throw new BusinessException(ResponseStatus.USER_NOT_FOUND);
+            throw new RuntimeException("用户不存在");
         Map<String, Object> claims = new HashMap<>(4);
         claims.put("id", user.getId());
         claims.put("sign", user.getSign());
@@ -85,7 +99,7 @@ public class JwtTokenUtil {
     private static String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setId(CommonUtils.getUUIDStr())
+                .setId(UUID.randomUUID().toString().replaceAll("-", ""))
                 .setExpiration(generateExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, generalKey())
                 .compact();
@@ -112,6 +126,7 @@ public class JwtTokenUtil {
                     .getBody();
         } catch (Exception e) {
             logger.info("token验证失败:{}", token);
+            e.printStackTrace();
         }
         return claims;
     }
@@ -151,8 +166,11 @@ public class JwtTokenUtil {
             return null;
         UserInfo user = new UserInfo() {
             @Override
-            public Serializable getId() {
-                return (Serializable) claims.get("id");
+            public Long getId() {
+                Object idObj = claims.get("id");
+                if (idObj != null)
+                    return Long.parseLong(idObj.toString());
+                return null;
             }
             @Override
             public String getSign() {

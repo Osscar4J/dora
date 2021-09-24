@@ -1,15 +1,15 @@
 package com.zhao.doraauth.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zhao.common.modal.TokenModel;
+import com.zhao.common.modal.UserInfo;
+import com.zhao.common.utils.JwtTokenUtil;
 import com.zhao.common.utils.encrypt.MD5Utils;
 import com.zhao.commonservice.constants.ResponseStatus;
-import com.zhao.commonservice.entity.TokenModel;
 import com.zhao.commonservice.exception.BusinessException;
 import com.zhao.commonservice.service.RedisService;
-import com.zhao.commonservice.service.UserInfo;
 import com.zhao.commonservice.utils.Asserts;
 import com.zhao.commonservice.utils.CommonUtils;
-import com.zhao.commonservice.utils.JwtTokenUtil;
 import com.zhao.doraauth.constants.AuthConstants;
 import com.zhao.doraauth.dao.AccountMapper;
 import com.zhao.doraauth.entity.Account;
@@ -19,7 +19,6 @@ import com.zhao.dorambg.service.impl.MyBaseServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -35,8 +34,6 @@ public class AccountServiceImpl extends MyBaseServiceImpl<AccountMapper, Account
 
     @Autowired
     private RedisService redisService;
-    @Value("${jwt.tokenExp}")
-    private Integer tokenExp;
     private Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     @Override
@@ -69,7 +66,7 @@ public class AccountServiceImpl extends MyBaseServiceImpl<AccountMapper, Account
                         return sign;
                     }
                 });
-                redisService.putMapCache(AuthConstants.REFRESH_TOKEN_KEY, ""+account.getUserId(), sign, tokenExp);
+                redisService.putMapCache(AuthConstants.REFRESH_TOKEN_KEY, ""+account.getUserId(), sign, JwtTokenUtil.getConfiguration().getRefreshExp());
                 logger.info("账号:{} 生成token:{},签名:{}", account.getAccount(), refreshToken, sign);
                 LoginRespVO res = new LoginRespVO();
                 res.setAccessToken(JwtTokenUtil.generateToken(new UserInfo() {

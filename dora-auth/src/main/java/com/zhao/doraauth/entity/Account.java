@@ -3,7 +3,7 @@ package com.zhao.doraauth.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.zhao.commonservice.service.UserInfo;
+import com.zhao.common.modal.UserInfo;
 import com.zhao.dorambg.entity.SuperEntity;
 
 import java.io.Serializable;

@@ -38,6 +38,7 @@
         <mysql-connector.version>8.0.16</mysql-connector.version>
         <jwt.version>0.9.0</jwt.version>
         <guava-version>30.1.1-jre</guava-version>
+        <zipkin.version>5.10.1</zipkin.version>
     </properties>
 
     <dependencies>
@@ -120,6 +121,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.zipkin.brave</groupId>
+                <artifactId>brave</artifactId>
+                <version>${zipkin.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

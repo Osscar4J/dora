@@ -42,7 +42,7 @@ class DoraAdminApplicationTests {
         logger.info("{}", dist);
 
         Map<String, Double> distMap = geo.radiusWithDistance(116.380684,39.906177, 3, GeoUnit.KILOMETERS);
-        logger.info("{}", distMap);
+        logger.info("{}", distMap); // {菜市口=1.1809, 天安门东=2.4864, 广安门内=1.8105, 复兴门=1.596}
 
     }
 

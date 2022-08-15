@@ -21,8 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
-
 /**
  * @ClassName: AccountServiceImpl
  * @Author: zhaolianqi
@@ -58,7 +56,7 @@ public class AccountServiceImpl extends MyBaseServiceImpl<AccountMapper, Account
                 String sign = CommonUtils.getUUIDStr();
                 String refreshToken = JwtTokenUtil.generateRefreshToken(new UserInfo() {
                     @Override
-                    public Serializable getId() {
+                    public Long getId() {
                         return account.getUserId();
                     }
                     @Override
@@ -71,7 +69,7 @@ public class AccountServiceImpl extends MyBaseServiceImpl<AccountMapper, Account
                 LoginRespVO res = new LoginRespVO();
                 res.setAccessToken(JwtTokenUtil.generateToken(new UserInfo() {
                     @Override
-                    public Serializable getId() { return account.getUserId(); }
+                    public Long getId() { return account.getUserId(); }
                     @Override
                     public String getSign() { return null; }
                 }));

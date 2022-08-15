@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.zhao.common.modal.UserInfo;
 import com.zhao.dorambg.entity.SuperEntity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -20,7 +19,7 @@ public class Account extends SuperEntity implements UserInfo {
 
     @TableId(type = IdType.INPUT)
     private String account;
-    private Integer userId;
+    private Long userId;
     private Integer isDel;
     private Integer status;
     private Integer type;
@@ -36,11 +35,11 @@ public class Account extends SuperEntity implements UserInfo {
         this.account = account;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -93,7 +92,7 @@ public class Account extends SuperEntity implements UserInfo {
     }
 
     @Override
-    public Serializable getId() {
+    public Long getId() {
         return this.userId;
     }
 

@@ -7,7 +7,12 @@ import com.zhao.doraauth.entity.Account;
 import com.zhao.doraauth.resp.LoginRespVO;
 import com.zhao.doraauth.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @ClassName: AuthApi
@@ -21,6 +26,17 @@ public class AuthApi {
 
     @Autowired
     private AccountService accountService;
+
+    @RequestMapping("")
+    public ResponseEntity<Object> doAuth(HttpServletRequest request, HttpServletResponse response){
+        String header = request.getHeader("token");
+        if ("root".equalsIgnoreCase(header)){
+            response.addHeader("X-Forwarded-User", "username=root");
+            return ResponseEntity.ok("success");
+        }
+        ResponseEntity.status(HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.ok("access denied");
+    }
 
     @PostMapping("/login")
     public BaseResponse<LoginRespVO> login(@RequestBody Account entity){
